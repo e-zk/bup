@@ -9,7 +9,7 @@ TAR_BIN=/usr/bin/bsdtar
 SUM_CMD="${SUM_CMD:-/usr/bin/sha256sum --tag}"
 
 SUM_TYPE="${SUM_TYPE:-sha256}"
-AGE_RECIPIENT="${AGE_RECIPIENT:-age13pt4qqvu5nj6s70rsgythfhkj49qnrswjegeqfpp0jgux68kl9gqcgvvz3}"
+AGE_RECIPIENT="${AGE_RECIPIENT}"
 SIGNIFY_KEY="${SIGNIFY_KEY:-./backups.sec}"
 ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
 
@@ -33,6 +33,8 @@ while read -r line; do
 done < "$FILE_LIST"
 
 log "archiving + encrypting..."
+# we need it to split here since the files are arguments:
+# shellcheck disable=SC2086
 $TAR_BIN -cvzf - $files | $AGE_BIN -a -r "$AGE_RECIPIENT" -o "$ARCHIVE"
 
 log "generating hash sum..."
