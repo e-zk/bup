@@ -21,12 +21,12 @@ The script requires four keys total. Two for encryption, and two for signing:
 
 The backup script generates three files as as so:
 
-	(tar) --> (age) --> archive.tar.gz.age
-	                |-> (sha256) --> archive.tar.gz.sha256
-	                               |-> (signify) --> archive.tar.gz.sha256.sig
-- archive.tar.gz.age            - age encrypted tar archive
-- archive.tar.gz.age.sha256     - sha256 checksum of the archive
-- archive.tar.gz.age.sha256.sig - sha256 checksum file signed with signify
+	(tar) --> (age) --> YYYY-MM-DD.tar.gz.age
+	                |-> (sha256) --> YYYY-MM-DD.tar.gz.sha256
+	                               |-> (signify) --> YYYY-MM-DD.tar.gz.sha256.sig
+- YYYY-MM-DD.tar.gz.age            - age encrypted tar archive
+- YYYY-MM-DD.tar.gz.age.sha256     - sha256 checksum of the archive
+- YYYY-MM-DD.tar.gz.age.sha256.sig - sha256 checksum file signed with signify
 
 ## Usage
 
