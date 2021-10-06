@@ -6,3 +6,42 @@ Encrypted, signed, backups (still WIP).
 The backup script archives and encrypts a list of paths using `age`, generates a checksum file, and finally signs that checksum file with `signify`.
 
 The restore script verifies the signature and checksum of the archive, then decrypts and extracts it to the specified restore root.
+
+The script requires four keys total. Two for encryption, and two for signing:
+
+- [signify_key] - signify private key file
+   - used during backup for signing the checksum file
+- [signify_pub] - signify public key file
+   - used during restore for signature verification
+- [age_key] - age private key file 
+   - used during restore archive decryption
+- [age_recipient] - age public key 
+   - used during backup for encryption
+   - passed in command-line arguments
+
+The backup script generates three files as as so:
+
+	tar --> age --> [archive.tar.gz.age]
+	                |-> sha256 --> [archive.tar.gz.sha256]
+	                               |-> signify --> [archive.tar.gz.sha256.sig]
+- archive.tar.gz.age            - age encrypted tar archive
+- archive.tar.gz.age.sha256     - sha256 checksum of the archive
+- archive.tar.gz.age.sha256.sig - sha256 checksum file signed with signify
+
+## Usage
+
+### Setup keys
+
+First the age key pair, used for encryption:
+
+	$ age-keygen -o backups_key.txt
+	Public key: age1ql3z7hjy54pw3hyww5ayyfg7zqgvc7w3j2elw8zmrj2kg5sfn9aqmcac8p
+This public key is what you will need to pass to the backup script for it to encrypt the tar archive. The `backups_key.txt` private key will be needed for decryption.
+
+age does not do any signing or authentication, so I opted to use OpenBSD's signify tool for that. To generate they signify keys use `signify` on OpenBSD, or install `signify-openbsd` on Linux:
+
+	$ signify -G -p backups_sign.pub -s backups_sign.sec
+	passphrase:
+	confirm passphrase:
+
+You will need to remember this passphrase for when the backup script signs the checksum file of the 
