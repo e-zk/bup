@@ -1,5 +1,5 @@
 # bup
-Encrypted, signed, backups (still WIP).
+Encrypted, signed, backup script(s).
 
 ## About
 
@@ -21,9 +21,9 @@ The script requires four keys total. Two for encryption, and two for signing:
 
 The backup script generates three files as as so:
 
-	tar --> age --> [archive.tar.gz.age]
-	                |-> sha256 --> [archive.tar.gz.sha256]
-	                               |-> signify --> [archive.tar.gz.sha256.sig]
+	(tar) --> (age) --> archive.tar.gz.age
+	                |-> (sha256) --> archive.tar.gz.sha256
+	                               |-> (signify) --> archive.tar.gz.sha256.sig
 - archive.tar.gz.age            - age encrypted tar archive
 - archive.tar.gz.age.sha256     - sha256 checksum of the archive
 - archive.tar.gz.age.sha256.sig - sha256 checksum file signed with signify
@@ -44,4 +44,27 @@ age does not do any signing or authentication, so I opted to use OpenBSD's signi
 	passphrase:
 	confirm passphrase:
 
-You will need to remember this passphrase for when the backup script signs the checksum file of the 
+You will need to remember this passphrase for when the backup script runs `signify` to sign the checksum file.
+
+### Backing up
+
+Create a list of directories and files separated by newline you wish to back up. For example a list file could look like this:
+
+	/home/username/work/
+	/home/username/code/
+	/etc/httpd.conf
+	/etc/relayd.conf
+
+Next run the backup script, passing the age public key, signify private key, and the file containing your list of files to add to the archive:
+
+	backup.sh age1[...] backups_sign.sec backup_list
+
+By default the script will create `YYYY-MM-DD.tar.gz.age` in the current directory.  
+The script will prompt for the signify private key's passphrase.
+
+### Restoring from backup
+
+To restore from backup point the restore script to the backup archive `YYYY-MM-DD.tar.gz.age` and the root to which you wish to extract the archive to, making sure the associated checksum and signed checksum files are in the current directory.
+
+	restore.sh YYYY-MM-DD.tar.gz.age /
+
