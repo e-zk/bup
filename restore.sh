@@ -2,25 +2,28 @@
 
 set -e
 
-ARCHIVE="$1"
-RESTORE_ROOT="${2:-/}"
+AGE_KEY="$1"
+SIGNIFY_PUB="$2"
+ARCHIVE="$3"
+RESTORE_ROOT="${4:-/}"
+
+ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
 
 AGE_BIN=/usr/local/bin/age
 SIGNIFY_BIN=/usr/bin/signify-openbsd
 TAR_BIN=/usr/bin/bsdtar
 SUM_CMD="${SUM_CMD:-/usr/bin/sha256sum --tag}"
-
 SUM_TYPE="${SUM_TYPE:-sha256}"
-AGE_KEY="${AGE_KEY:-./backup_key.txt}"
-SIGNIFY_PUB="${SIGNIFY_BUP:-./backups.pub}"
-ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
 
 usage() {
 	cat<<EOF
-usage: restore.sh <archive> [root]
+usage: restore.sh age_key signify_pub archive [root]
 where:
-  archive  is the archive to restore
-  root     is the optional root to extract to (tar -C)
+  age_key     is the path to the age private key
+  signify_pub path to the signify public key
+  archive     is the archive to restore
+  root        is the optional root to extract to (tar -C)
+              (default is '/')
 EOF
 }
 
