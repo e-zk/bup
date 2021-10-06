@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 ARCHIVE="$(date '+%F').tar.gz.age"
 FILE_LIST="${1:-./file_list}"
 
@@ -25,20 +27,43 @@ log() {
 	printf "[bup] %s\n" "$1" >&2
 }
 
-log "adding files from file_list..."
+die() {
+	printf '[bup] error: %s\n' "$1" >&2
+	exit 127
+}
+
+cat <<EOF
+CHECKSUM TYPE    : ${SUM_TYPE}
+AGE RECIPIENT    : ${AGE_RECIPIENT}
+SIGNIFY KEY      : ${SIGNIFY_KEY}
+ARCHIVE FILENAME : ${ARCHIVE}
+FILE_LIST        : {
+EOF
+
+#log "adding files from file_list..."
 files=''
 while read -r line; do
-	log "  adding ${line}"
+	printf '                      %s,\n' "$line"
 	files="${files} ${line}"
 done < "$FILE_LIST"
+printf '                   }\n\n'
+
+test -f "$FILE_LIST"     || die "file list not found."
+test -f "$SIGNIFY_KEY"   || die "signify key could not be found."
+test -z "$AGE_RECIPIENT" && die "age recipient not specified."
+
+printf 'enter to continue (ctrl-c to cancel)...'
+read -r _
+printf '\n'
 
 log "archiving + encrypting..."
 # we need it to split here since the files are arguments:
 # shellcheck disable=SC2086
 $TAR_BIN -cvzf - $files | $AGE_BIN -a -r "$AGE_RECIPIENT" -o "$ARCHIVE"
 
-log "generating hash sum..."
+log "generating checksum..."
 $SUM_CMD "$ARCHIVE" > "$ARCHIVE_SUM"
 
-log "signing hash sum file..."
+log "signing checksum file."
+log "you will now be prompted for the signing key passphrase..."
 $SIGNIFY_BIN -S -e -x "${ARCHIVE_SUM}.sig" -s "$SIGNIFY_KEY" -m "$ARCHIVE_SUM"
