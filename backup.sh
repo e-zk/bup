@@ -6,13 +6,13 @@ AGE_RECIPIENT="${1}"
 SIGNIFY_KEY="${2}"
 FILE_LIST="${3}"
 
-ARCHIVE="$(date '+%F').tar.gz.age"
-ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
 AGE_BIN=/usr/local/bin/age
 SIGNIFY_BIN=/usr/bin/signify-openbsd
 TAR_BIN=/usr/bin/bsdtar
 SUM_CMD="${SUM_CMD:-/usr/bin/sha256sum --tag}"
 SUM_TYPE="${SUM_TYPE:-sha256}"
+ARCHIVE="$(date '+%F').tar.gz.age"
+ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
 
 usage() {
 	cat<<EOF

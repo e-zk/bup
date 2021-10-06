@@ -7,13 +7,13 @@ SIGNIFY_PUB="$2"
 ARCHIVE="$3"
 RESTORE_ROOT="${4:-/}"
 
-ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
 
 AGE_BIN=/usr/local/bin/age
 SIGNIFY_BIN=/usr/bin/signify-openbsd
 TAR_BIN=/usr/bin/bsdtar
 SUM_CMD="${SUM_CMD:-/usr/bin/sha256sum --tag}"
 SUM_TYPE="${SUM_TYPE:-sha256}"
+ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
 
 usage() {
 	cat<<EOF
