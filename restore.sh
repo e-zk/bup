@@ -7,7 +7,6 @@ SIGNIFY_PUB="$2"
 ARCHIVE="$3"
 RESTORE_ROOT="${4:-/}"
 
-
 AGE_BIN=/usr/local/bin/age
 SIGNIFY_BIN=/usr/bin/signify-openbsd
 TAR_BIN=/usr/bin/bsdtar
@@ -37,16 +36,20 @@ die() {
 }
 
 cat <<EOF
-ARCHIVE FILENAME : ${ARCHIVE}
-CHECKSUM TYPE    : ${SUM_TYPE}
-AGE KEY FILE     : ${AGE_KEY}
-SIGNIFY PUBKEY   : ${SIGNIFY_PUB}
+ARCHIVE FILENAME   : ${ARCHIVE}
+CHECKSUM TYPE      : ${SUM_TYPE}
+ARCHIVE CHECKSUM   : ${ARCHIVE_SUM}
+CHECKSUM SIGNATURE : ${ARCHIVE_SUM}.sig"
+AGE KEY FILE       : ${AGE_KEY}
+SIGNIFY PUBKEY     : ${SIGNIFY_PUB}
 
 EOF
 
-test -f "$ARCHIVE"    || die "archive file not found."
-test -f "$AGE_KEY"    || die "age private key file not found."
-test -f "SIGNIFY_PUB" || die "signify public key file not found."
+test -f "$ARCHIVE"           || die "archive file not found."
+test -f "$ARCHIVE_SUM"       || die "archive checksum file not found."
+test -f "${ARCHIVE_SUM}.sig" || die "signed checksum file not found."
+test -f "$AGE_KEY"           || die "age private key file not found."
+test -f "SIGNIFY_PUB"        || die "signify public key file not found."
 
 printf 'enter to continue (ctrl-c to cancel)...'
 read -r _
