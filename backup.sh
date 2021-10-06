@@ -2,23 +2,24 @@
 
 set -e
 
-ARCHIVE="$(date '+%F').tar.gz.age"
-FILE_LIST="${1:-./file_list}"
+AGE_RECIPIENT="${1}"
+SIGNIFY_KEY="${2}"
+FILE_LIST="${3}"
 
+ARCHIVE="$(date '+%F').tar.gz.age"
+ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
 AGE_BIN=/usr/local/bin/age
 SIGNIFY_BIN=/usr/bin/signify-openbsd
 TAR_BIN=/usr/bin/bsdtar
 SUM_CMD="${SUM_CMD:-/usr/bin/sha256sum --tag}"
-
 SUM_TYPE="${SUM_TYPE:-sha256}"
-AGE_RECIPIENT="${AGE_RECIPIENT}"
-SIGNIFY_KEY="${SIGNIFY_KEY:-./backups.sec}"
-ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
 
 usage() {
 	cat<<EOF
-usage: backup.sh <file_list_file>
+usage: backup.sh age_recipient signify_key file_list_file
 where:
+  age_recipient   age recipient / public key
+  signify_key     path to signify private key
   file_list_file  contains a list of newline separated paths to backup
 EOF
 }
