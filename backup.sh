@@ -13,9 +13,9 @@ TAR_BIN=/usr/bin/bsdtar
 SUM_CMD="${SUM_CMD:-/usr/bin/sha256sum --tag}"
 SUM_TYPE="${SUM_TYPE:-sha256}"
 ARCHIVE="$(date '+%F').tar.gz.age"
+test -n "$BACKUP_NAME" && ARCHIVE="${BACKUP_NAME}-${ARCHIVE}"
 
 ARCHIVE_SUM="${ARCHIVE}.${SUM_TYPE}"
-test -n "$BACKUP_NAME" && ARCHIVE_SUM="${BACKUP_NAME}-${ARCHIVE_SUM}"
 
 usage() {
 	cat<<EOF
