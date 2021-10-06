@@ -32,6 +32,7 @@ log() {
 
 die() {
 	printf '[bup] error: %s\n' "$1" >&2
+	usage
 	exit 127
 }
 
@@ -39,7 +40,7 @@ cat <<EOF
 ARCHIVE FILENAME   : ${ARCHIVE}
 CHECKSUM TYPE      : ${SUM_TYPE}
 ARCHIVE CHECKSUM   : ${ARCHIVE_SUM}
-CHECKSUM SIGNATURE : ${ARCHIVE_SUM}.sig"
+CHECKSUM SIGNATURE : ${ARCHIVE_SUM}.sig
 AGE KEY FILE       : ${AGE_KEY}
 SIGNIFY PUBKEY     : ${SIGNIFY_PUB}
 
