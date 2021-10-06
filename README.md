@@ -57,14 +57,17 @@ Create a list of directories and files separated by newline you wish to back up.
 
 Next run the backup script, passing the age public key, signify private key, and the file containing your list of files to add to the archive:
 
-	backup.sh age1[...] backups_sign.sec backup_list
+	$ backup.sh age1[...] backups_sign.sec backup_list
 
 By default the script will create `YYYY-MM-DD.tar.gz.age` in the current directory.  
 The script will prompt for the signify private key's passphrase.
 
 ### Restoring from backup
 
-To restore from backup point the restore script to the backup archive `YYYY-MM-DD.tar.gz.age` and the root to which you wish to extract the archive to, making sure the associated checksum and signed checksum files are in the current directory.
+To restore from backup point the restore script to the aprropriate keys, the backup archive `YYYY-MM-DD.tar.gz.age`, and optionallt the root to which you wish to extract the archive to, making sure the associated checksum and signed checksum files are in the current directory.
 
-	restore.sh YYYY-MM-DD.tar.gz.age /
+	$ ls YYYY-MM-DD.tar.gz.age.sha256{,.sig}
+	YYYY-MM-DD.tar.gz.age.sha256 YYYY-MM-DD.tar.gz.age.sha256.sig
+	$ restore.sh backups_key.txt backups_sign.pub YYYY-MM-DD.tar.gz.age /
+	...
 
