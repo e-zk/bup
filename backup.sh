@@ -7,10 +7,18 @@ SIGNIFY_KEY="$2"
 FILE_LIST="$3"
 BACKUP_NAME="$4"
 
+# uncomment for typical Linux binary paths
+#AGE_BIN=/usr/local/bin/age
+#SIGNIFY_BIN=/usr/bin/signify-openbsd
+#TAR_BIN=/usr/bin/bsdtar
+#SUM_CMD="${SUM_CMD:-/usr/bin/sha256sum --tag}"
+
+# uncomment for OpenBSD binary paths
 AGE_BIN=/usr/local/bin/age
-SIGNIFY_BIN=/usr/bin/signify-openbsd
-TAR_BIN=/usr/bin/bsdtar
-SUM_CMD="${SUM_CMD:-/usr/bin/sha256sum --tag}"
+SIGNIFY_BIN=/usr/bin/signify
+TAR_BIN=/bin/tar
+SUM_CMD="${SUM_CMD:-sha256}"
+
 SUM_TYPE="${SUM_TYPE:-sha256}"
 ARCHIVE="$(date '+%F').tar.gz.age"
 test -n "$BACKUP_NAME" && ARCHIVE="${BACKUP_NAME}-${ARCHIVE}"
